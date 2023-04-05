@@ -1,0 +1,23 @@
+version: '3'
+# Instead of using: docker run -it -p 3000:3000 -v /home/node/app/node_modules -v ~/my-project-directory:/home/node/app IMAGE_ID
+services:
+  web:
+    # Build the image using the dockerfile.dev
+    build:
+    # Specify a context; in this case the current directory
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/node/app/node_modules
+      - .:/home/node/app
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /home/node/app/node_modules
+      - .:/home/node/app
+    # Override the start-up command because the image calls the npm run start
+    command: ["npm", "run", "test"]
